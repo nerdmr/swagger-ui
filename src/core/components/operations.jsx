@@ -11,6 +11,8 @@ const OAS3_OPERATION_METHODS = SWAGGER2_OPERATION_METHODS.concat(["trace"])
 
 export default class Operations extends React.Component {
 
+  opsFilter;
+
   static propTypes = {
     specSelectors: PropTypes.object.isRequired,
     specActions: PropTypes.object.isRequired,
@@ -28,9 +30,26 @@ export default class Operations extends React.Component {
   render() {
     let {
       specSelectors,
+      operations
     } = this.props
 
-    const taggedOps = specSelectors.taggedOperations()
+    this.opsFilter = operations
+
+    let taggedOps = specSelectors.taggedOperations()
+
+    // eslint-disable-next-line no-console
+    // console.log("'ops'", operations)
+    if (operations && operations.length > 0) {
+      taggedOps = taggedOps.filter((val, key) => {
+        // eslint-disable-next-line no-console
+        // console.log("value", val, "key", key)
+
+        return operations.some(item => key === item)
+      })
+    }
+
+    // eslint-disable-next-line no-console
+    // console.log("operations comp", this.opsFilter, taggedOps)
 
     if(taggedOps.size === 0) {
       return <h3> No operations defined in spec!</h3>
@@ -108,6 +127,7 @@ export default class Operations extends React.Component {
 Operations.propTypes = {
   layoutActions: PropTypes.object.isRequired,
   specSelectors: PropTypes.object.isRequired,
+  operations: PropTypes.array,
   specActions: PropTypes.object.isRequired,
   layoutSelectors: PropTypes.object.isRequired,
   getComponent: PropTypes.func.isRequired,

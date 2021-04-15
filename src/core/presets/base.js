@@ -87,6 +87,7 @@ import SvgAssets from "core/components/svg-assets"
 import Markdown from "core/components/providers/markdown"
 
 import BaseLayout from "core/components/layouts/base"
+import OperationsLayout from "core/components/layouts/operations"
 
 import * as LayoutUtils from "core/components/layout-utils"
 import * as JsonSchemaComponents from "core/json-schema-components"
@@ -149,6 +150,7 @@ export default function() {
       TryItOutButton,
       Markdown,
       BaseLayout,
+      OperationsLayout,
       VersionPragmaFilter,
       VersionStamp,
       OperationExt,

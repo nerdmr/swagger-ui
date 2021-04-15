@@ -34,6 +34,9 @@
 <body>
   <div id="swagger-ui"></div>
 
+  <div id="test-ele-outer"><div id="test-ele"></div></div>
+  <div id="test-ele-outer"><div id="test-store"></div></div>
+
   <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
   <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
   <script>
@@ -51,7 +54,8 @@
         plugins: [
           SwaggerUIBundle.plugins.DownloadUrl
         ],
-        layout: "StandaloneLayout"
+        layout: "OperationsLayout",
+        initOnly: true,
       })
 
       window.ui = ui
@@ -66,6 +70,9 @@
         additionalQueryStringParams: {},
         usePkceWithAuthorizationCodeGrant: false
       })
+
+      ui.renderSingleOperation('pet', document.querySelector('#test-ele'))
+      ui.renderSingleOperation('pet', document.querySelector('#test-store'))
     }
   </script>
 </body>

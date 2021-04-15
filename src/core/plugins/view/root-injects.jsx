@@ -64,9 +64,22 @@ export const makeMappedContainer = (getSystem, getStore, memGetComponent, getCom
 
 }
 
-export const render = (getSystem, getStore, getComponent, getComponents, domNode) => {
-  let App = (getComponent(getSystem, getStore, getComponents, "App", "root"))
+export const render = (getSystem, getStore, getComponent, getComponents, domNode, appComponent) => {
+  if (!appComponent) {
+    appComponent = "App"
+  }
+  let App = (getComponent(getSystem, getStore, getComponents, appComponent, "root"))
   ReactDOM.render(( <App/> ), domNode)
+}
+
+export const renderOperation = (getSystem, getStore, getComponent, getComponents, domNode, appComponent, opFilter) => {
+  if (!appComponent) {
+    appComponent = "App"
+  }
+  let App = (getComponent(getSystem, getStore, getComponents, appComponent, "root"))
+  // eslint-disable-next-line no-console
+  // console.log("'opsfilterinject'", opFilter)
+  ReactDOM.render(( <App operationFilter={opFilter} /> ), domNode)
 }
 
 // Render try/catch wrapper
@@ -76,7 +89,7 @@ const createClass = component => class extends Component {
   }
 }
 
-const Fallback = ({ 
+const Fallback = ({
   name // eslint-disable-line react/prop-types
 }) => <div className="fallback">😱 <i>Could not render { name === "t" ? "this component" : name }, see the console.</i></div>
 

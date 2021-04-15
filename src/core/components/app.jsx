@@ -11,16 +11,35 @@ export default class App extends React.Component {
   }
 
   render() {
-    const Layout = this.getLayout()
+    let { operationFilter, getComponent } = this.props
 
-    return (
-      <Layout/>
-    )
+    // eslint-disable-next-line no-console
+    // console.log("opsfiltersapp|", operationFilter)
+
+    if (operationFilter) {
+      const OperationsLayout = getComponent("OperationsLayout", true)
+
+      return (
+        <OperationsLayout operations={[operationFilter]}/>
+      )
+    } else {
+      const Layout = this.getLayout()
+
+      return (
+        <Layout/>
+      )
+    }
+
+
+
+
   }
 }
 
 App.propTypes = {
   getComponent: PropTypes.func.isRequired,
+  operationFilter: PropTypes.string,
+  action: PropTypes.string,
   layoutSelectors: PropTypes.object.isRequired,
 }
 

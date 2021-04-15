@@ -41,6 +41,7 @@ export default function SwaggerUI(opts) {
     configs: {},
     custom: {},
     displayOperationId: false,
+    initOnly: false,
     displayRequestDuration: false,
     deepLinking: false,
     tryItOutEnabled: false,
@@ -181,17 +182,40 @@ export default function SwaggerUI(opts) {
       }
     }
 
+    let domNode
     if(mergedConfig.domNode) {
-      system.render(mergedConfig.domNode, "App")
+      domNode = mergedConfig.domNode
     } else if(mergedConfig.dom_id) {
-      let domNode = document.querySelector(mergedConfig.dom_id)
-      system.render(domNode, "App")
-    } else if(mergedConfig.dom_id === null || mergedConfig.domNode === null) {
-      // do nothing
-      // this is useful for testing that does not need to do any rendering
-    } else {
-      console.error("Skipped rendering: no `dom_id` or `domNode` was specified")
+      domNode = document.querySelector(mergedConfig.dom_id)
     }
+
+    if (mergedConfig.initOnly) {
+      system.renderSingleOperation = (opFilter, elementToInjectInto) => {
+        if (elementToInjectInto) {
+          domNode = elementToInjectInto
+        }
+
+        system.renderOperation(domNode, "App", opFilter)
+      }
+      system.addUi = () => {
+        // eslint-disable-next-line no-console
+        // console.log(tag)
+        system.render(domNode, "App")
+      }
+    } else {
+      if(mergedConfig.domNode) {
+        system.render(mergedConfig.domNode, "App")
+      } else if(mergedConfig.dom_id) {
+        let domNode = document.querySelector(mergedConfig.dom_id)
+        system.render(domNode, "App")
+      } else if(mergedConfig.dom_id === null || mergedConfig.domNode === null) {
+        // do nothing
+        // this is useful for testing that does not need to do any rendering
+      } else {
+        console.error("Skipped rendering: no `dom_id` or `domNode` was specified")
+      }
+    }
+
 
     return system
   }
@@ -219,3 +243,4 @@ SwaggerUI.presets = {
 
 // All Plugins
 SwaggerUI.plugins = AllPlugins
+
