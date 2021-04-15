@@ -1,48 +1,41 @@
 import React from "react"
 import PropTypes from "prop-types"
 
+
+
 // Create the layout component
 export default class OperationsLayout extends React.Component {
   static propTypes = {
-
+    errSelectors: PropTypes.object.isRequired,
+    errActions: PropTypes.object.isRequired,
+    specSelectors: PropTypes.object.isRequired,
+    oas3Selectors: PropTypes.object.isRequired,
+    oas3Actions: PropTypes.object.isRequired,
     getComponent: PropTypes.func.isRequired
   }
 
   render() {
     const {
       getComponent,
-      operations
+      operations, specSelectors
     } = this.props
 
-    const Operations = getComponent("operations", true)
+    let SvgAssets = getComponent("SvgAssets")
 
-    // eslint-disable-next-line no-console
-    // console.log("ops layout", operations)
+    const Operations = getComponent("operations", true)
+    const AuthorizeBtnContainer = getComponent("AuthorizeBtnContainer", true)
+    const hasSecurityDefinitions = !!specSelectors.securityDefinitions()
 
     return (
       <div className='swagger-ui'>
+        <SvgAssets />
+        {hasSecurityDefinitions ? (<AuthorizeBtnContainer modalOnly={true} />) : null}
         <Operations operations={operations} />
       </div>
     )
   }
 }
 
-// Create the plugin that provides our layout component
-// const OperationsLayoutPlugin = () => {
-//   return {
-//     components: {
-//       OperationsLayout: OperationsLayout
-//     }
-//   }
-// }
-
-// Provide the plugin to Swagger-UI, and select OperationsLayout
-// as the layout for Swagger-UI
-// SwaggerUI({
-//   url: "https://petstore.swagger.io/v2/swagger.json",
-//   plugins: [ OperationsLayoutPlugin ],
-//   layout: "OperationsLayout"
-// })
 
 OperationsLayout.propTypes = {
   operations: PropTypes.array

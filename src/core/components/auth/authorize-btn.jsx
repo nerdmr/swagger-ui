@@ -6,23 +6,24 @@ export default class AuthorizeBtn extends React.Component {
     onClick: PropTypes.func,
     isAuthorized: PropTypes.bool,
     showPopup: PropTypes.bool,
-    getComponent: PropTypes.func.isRequired
+    getComponent: PropTypes.func.isRequired,
+    modalOnly: PropTypes.bool
   }
 
   render() {
-    let { isAuthorized, showPopup, onClick, getComponent } = this.props
+    let { isAuthorized, showPopup, onClick, getComponent, modalOnly } = this.props
 
     //must be moved out of button component
     const AuthorizationPopup = getComponent("authorizationPopup", true)
 
     return (
       <div className="auth-wrapper">
-        <button className={isAuthorized ? "btn authorize locked" : "btn authorize unlocked"} onClick={onClick}>
+        { !modalOnly && (<button className={isAuthorized ? "btn authorize locked" : "btn authorize unlocked"} onClick={onClick}>
           <span>Authorize</span>
           <svg width="20" height="20">
             <use href={ isAuthorized ? "#locked" : "#unlocked" } xlinkHref={ isAuthorized ? "#locked" : "#unlocked" } />
           </svg>
-        </button>
+        </button>)}
       { showPopup && <AuthorizationPopup /> }
       </div>
     )
