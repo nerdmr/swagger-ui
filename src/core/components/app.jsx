@@ -11,16 +11,16 @@ export default class App extends React.Component {
   }
 
   render() {
-    let { operationFilter, getComponent } = this.props
+    let { tagFilter, operationPathFilter, operationMethodFilter, getComponent } = this.props
 
     // eslint-disable-next-line no-console
     // console.log("opsfiltersapp|", operationFilter)
 
-    if (operationFilter) {
+    if (tagFilter) {
       const OperationsLayout = getComponent("OperationsLayout", true)
 
       return (
-        <OperationsLayout operations={[operationFilter]}/>
+        <OperationsLayout operationPathFilter={operationPathFilter} operationMethodFilter={operationMethodFilter} tags={[tagFilter]}/>
       )
     } else {
       const Layout = this.getLayout()
@@ -38,9 +38,12 @@ export default class App extends React.Component {
 
 App.propTypes = {
   getComponent: PropTypes.func.isRequired,
-  operationFilter: PropTypes.string,
+  operationPathFilter: PropTypes.array,
+  operationMethodFilter: PropTypes.array,
+  tagFilter: PropTypes.string,
   action: PropTypes.string,
   layoutSelectors: PropTypes.object.isRequired,
+
 }
 
 App.defaultProps = {

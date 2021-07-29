@@ -17,7 +17,10 @@ export default class OperationsLayout extends React.Component {
   render() {
     const {
       getComponent,
-      operations, specSelectors
+      operationPathFilter,
+      operationMethodsFilter,
+      tags,
+      specSelectors
     } = this.props
 
     let SvgAssets = getComponent("SvgAssets")
@@ -30,7 +33,7 @@ export default class OperationsLayout extends React.Component {
       <div className='swagger-ui'>
         <SvgAssets />
         {hasSecurityDefinitions ? (<AuthorizeBtnContainer modalOnly={true} />) : null}
-        <Operations operations={operations} />
+        <Operations operationPathFilter={operationPathFilter} operationMethodsFilter={operationMethodsFilter} tags={tags} />
       </div>
     )
   }
@@ -38,5 +41,7 @@ export default class OperationsLayout extends React.Component {
 
 
 OperationsLayout.propTypes = {
-  operations: PropTypes.array
+  operationPathFilter: PropTypes.array,
+  operationMethodsFilter: PropTypes.array,
+  tags: PropTypes.array
 }

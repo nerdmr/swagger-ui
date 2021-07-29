@@ -72,14 +72,14 @@ export const render = (getSystem, getStore, getComponent, getComponents, domNode
   ReactDOM.render(( <App/> ), domNode)
 }
 
-export const renderOperation = (getSystem, getStore, getComponent, getComponents, domNode, appComponent, opFilter) => {
+export const renderTag = (getSystem, getStore, getComponent, getComponents, domNode, appComponent, tagFilter, opPathFilter, opMethodFilter) => {
   if (!appComponent) {
     appComponent = "App"
   }
   let App = (getComponent(getSystem, getStore, getComponents, appComponent, "root"))
   // eslint-disable-next-line no-console
   // console.log("'opsfilterinject'", opFilter)
-  ReactDOM.render(( <App operationFilter={opFilter} /> ), domNode)
+  ReactDOM.render(( <App operationPathFilter={opPathFilter} operationMethodFilter={opMethodFilter} tagFilter={tagFilter} /> ), domNode)
 }
 
 // Render try/catch wrapper

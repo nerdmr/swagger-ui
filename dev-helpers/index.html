@@ -35,11 +35,82 @@
   <div id="swagger-ui"></div>
 
   <div id="test-ele-outer"><div id="test-ele"></div></div>
-  <div id="test-ele-outer"><div id="test-store"></div></div>
+  <!-- <div id="test-ele-outer"><div id="test-store"></div></div> -->
 
   <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
   <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
   <script>
+const CaseInsensitiveFilterPlugin = function (system) {
+    return {
+        fn: {
+            opsFilter: (taggedOps, opsFilter) => {
+
+                const paths = opsFilter.get('paths');
+                const tags = opsFilter.get('tags');
+                const methods = opsFilter.get('methods');
+
+                console.log('taggedops', taggedOps);
+
+                return taggedOps
+
+                  .filter((tagObj, tag) => {
+                    // filter out by tag
+                    if (
+                      tags && tags.size > 0 && !tags.some(t => t === tag)
+                    ) {
+                      return false
+                    }
+
+                    return true;
+                  })
+                  .updateIn(
+                    tags,
+                    (tagObj) => {
+                      if (!tagObj) {
+                        return tagObj;
+                      }
+
+                      return tagObj.update('operations', (ops) => {
+
+                        return ops.update((ops) => {
+
+                          for (let i = ops.size - 1; i >= 0; i--) {
+                            const op = ops.get(i);
+
+                            if (
+                              !((
+                                (
+                                  !methods ||
+                                  methods.size === 0 ||
+                                  methods.some(method => op.get("method").toLowerCase().indexOf(method.toLowerCase()) !== -1)
+                                )
+                              ) &&
+                              (
+                                (
+                                  !paths ||
+                                  paths.size === 0 ||
+                                  paths.some(path => op.get("path").toLowerCase().indexOf(path.toLowerCase()) !== -1))
+                              ))
+                            ) {
+                              ops = ops.delete(i);
+                            }
+                          }
+
+                          return ops;
+                        });
+
+                        return ops;
+                      })
+
+                      return tagObj
+                    }
+                  );
+
+            }
+        }
+    }
+};
+
     window.onload = function() {
       window["SwaggerUIBundle"] = window["swagger-ui-bundle"]
       window["SwaggerUIStandalonePreset"] = window["swagger-ui-standalone-preset"]
@@ -52,8 +123,11 @@
           SwaggerUIStandalonePreset
         ],
         plugins: [
-          SwaggerUIBundle.plugins.DownloadUrl
+        CaseInsensitiveFilterPlugin,
+        SwaggerUIBundle.plugins.DownloadUrl,
+
         ],
+        filter: {paths: [], tags: ['pet'], methods: ['GET']},
         layout: "OperationsLayout",
         initOnly: true,
       })
@@ -71,8 +145,8 @@
         usePkceWithAuthorizationCodeGrant: false
       })
 
-      ui.renderSingleOperation('pet', document.querySelector('#test-ele'))
-      ui.renderSingleOperation('pet', document.querySelector('#test-store'))
+      ui.renderSingleTag(document.querySelector('#test-ele'), 'store', ['inventory'])
+      // ui.renderSingleOperation('pet', document.querySelector('#test-store'))
     }
   </script>
 </body>

@@ -190,12 +190,12 @@ export default function SwaggerUI(opts) {
     }
 
     if (mergedConfig.initOnly) {
-      system.renderSingleOperation = (opFilter, elementToInjectInto) => {
+      system.renderSingleTag = (elementToInjectInto, tagFilter, operationPathFilter = [], operationMethodFilter = []) => {
         if (elementToInjectInto) {
           domNode = elementToInjectInto
         }
 
-        system.renderOperation(domNode, "App", opFilter)
+        system.renderTag(domNode, "App", tagFilter, operationPathFilter, operationMethodFilter)
       }
       system.addUi = () => {
         // eslint-disable-next-line no-console

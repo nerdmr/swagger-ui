@@ -3,7 +3,7 @@ import { memoize } from "core/utils"
 
 export default function({getComponents, getStore, getSystem}) {
 
-  let { getComponent, render, renderOperation, makeMappedContainer } = rootInjects
+  let { getComponent, render, renderTag, makeMappedContainer } = rootInjects
 
   // getComponent should be passed into makeMappedContainer, _already_ memoized... otherwise we have a big performance hit ( think, really big )
   const memGetComponent = memoize(getComponent.bind(null, getSystem, getStore, getComponents))
@@ -14,7 +14,7 @@ export default function({getComponents, getStore, getSystem}) {
       getComponent: memGetComponent,
       makeMappedContainer: memMakeMappedContainer,
       render: render.bind(null, getSystem, getStore, getComponent, getComponents),
-      renderOperation: renderOperation.bind(null, getSystem, getStore, getComponent, getComponents),
+      renderTag: renderTag.bind(null, getSystem, getStore, getComponent, getComponents),
     }
   }
 }

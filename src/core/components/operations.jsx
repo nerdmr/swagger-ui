@@ -11,8 +11,6 @@ const OAS3_OPERATION_METHODS = SWAGGER2_OPERATION_METHODS.concat(["trace"])
 
 export default class Operations extends React.Component {
 
-  opsFilter;
-
   static propTypes = {
     specSelectors: PropTypes.object.isRequired,
     specActions: PropTypes.object.isRequired,
@@ -30,23 +28,109 @@ export default class Operations extends React.Component {
   render() {
     let {
       specSelectors,
-      operations
+      operationPathFilter,
+      operationMethodsFilter,
+      tags
     } = this.props
 
-    this.opsFilter = operations
 
     let taggedOps = specSelectors.taggedOperations()
 
-    // eslint-disable-next-line no-console
-    // console.log("'ops'", operations)
-    if (operations && operations.length > 0) {
-      taggedOps = taggedOps.filter((val, key) => {
-        // eslint-disable-next-line no-console
-        // console.log("value", val, "key", key)
 
-        return operations.some(item => key === item)
-      })
-    }
+
+    // // eslint-disable-next-line no-console
+    // console.log("REDNER", operationPathFilter)
+
+    // if (tags && tags.length > 0) {
+    //   // filter by tag
+    //   taggedOps = taggedOps.filter((val, key) => {
+    //     return tags.some(item => key === item)
+    //   })
+
+
+    //   // // delete any ops or filters that don't match our patterns
+    //   // const taggedOpsValues = taggedOps.values()
+    //   // let tag = taggedOpsValues.next()
+    //   // while (!tag.done) {
+    //   //   // eslint-disable-next-line no-console
+    //   //   console.log(tag.value) // 1 3 5 7 9
+
+
+    //   //   let tagDetails = tag.value.entries()
+    //   //   while(!tagDetails.done) {
+    //   //     // eslint-disable-next-line no-console
+    //   //     console.log("td", tagDetails) // 1 3 5 7 9
+    //   //     tagDetails = taggedOpsValues.next()
+    //   //   }
+
+    //   //   tag = taggedOpsValues.next()
+    //   // }
+
+
+    //   .map((val) => {
+    //     // eslint-disable-next-line no-console
+    //     val.set("operations2", [...val.get("operations").delete(0)])
+    //     // eslint-disable-next-line no-console
+    //     console.log("ops??", val, val.get("operations"), val.get("operations").delete(0), val.get("operations2"))
+
+    //     val.set("test", "hello")
+
+    //     // eslint-disable-next-line no-console
+    //     console.log(val.get("test"))
+
+    //     return val
+
+    //     // val.set("operations", ...val.get("operations").filter((operation) => {
+    //     //   return false && (
+    //     //     (
+    //     //       (
+    //     //         !operationMethodsFilter ||
+    //     //         operationMethodsFilter.length === 0 ||
+    //     //         operationMethodsFilter.some(method => operation.get("method").indexOf(method) !== -1)
+    //     //       )
+    //     //     ) &&
+    //     //     (
+    //     //       (
+    //     //         !operationPathFilter ||
+    //     //         operationPathFilter.length === 0 ||
+    //     //         operationPathFilter.some(path => operation.get("path").indexOf(path) !== -1))
+    //     //       )
+    //     //     )
+    //     // }))
+
+    //   //   // eslint-disable-next-line no-console
+    //   //   // console.log("Map", val, [...val], [...val]
+    //   //   // .filter(([key, value]) => {
+    //   //   //   return true
+    //   //   // }))
+
+    //   //   val = new Map(
+    //   //     [...val]
+    //   //     .filter(([key, value]) => {
+    //   //       if (key !== "operation") {
+    //   //         return true
+    //   //       } else {
+    //   //         return true
+    //   //       }
+
+    //   //       // eslint-disable-next-line no-console
+    //   //       // console.log("keyop", key, operation)
+    //   //       // return true
+    //   //     })
+    //   //   )
+
+    //   //   // eslint-disable-next-line no-console
+    //   //   // console.log("filtereops", val)
+
+    //   //   setTimeout(() => {
+
+    //   //   }, 0)
+    //   //   return val
+    //   })
+    // }
+
+    // eslint-disable-next-line no-console
+    // console.log("taggedopssss", taggedOps)
 
     // eslint-disable-next-line no-console
     // console.log("operations comp", this.opsFilter, taggedOps)
@@ -55,6 +139,12 @@ export default class Operations extends React.Component {
       return <h3> No operations defined in spec!</h3>
     }
 
+    // taggedOps = new Map(
+    //   [...taggedOps] // step 1
+    //   .filter(([k, v]) => false) // step 2
+    // )
+
+
     return (
       <div>
         { taggedOps.map(this.renderOperationTag).toArray() }
@@ -62,6 +152,8 @@ export default class Operations extends React.Component {
       </div>
     )
   }
+
+
 
   renderOperationTag = (tagObj, tag) => {
     const {
@@ -127,7 +219,9 @@ export default class Operations extends React.Component {
 Operations.propTypes = {
   layoutActions: PropTypes.object.isRequired,
   specSelectors: PropTypes.object.isRequired,
-  operations: PropTypes.array,
+  operationPathFilter: PropTypes.array,
+  operationMethodsFilter: PropTypes.array,
+  tags: PropTypes.array,
   specActions: PropTypes.object.isRequired,
   layoutSelectors: PropTypes.object.isRequired,
   getComponent: PropTypes.func.isRequired,
